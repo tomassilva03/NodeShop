@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 
 const { Pool } = require("pg");
 const fs = require('fs');

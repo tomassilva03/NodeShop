@@ -1,0 +1,11 @@
+version: '3'
+services:
+  postgres:
+    container_name: NodeShop
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: node
+      POSTGRES_PASSWORD: node
+      POSTGRES_DB: NodeShop
+    ports:
+      - "5432:5432"

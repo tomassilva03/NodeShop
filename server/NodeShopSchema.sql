@@ -41,6 +41,44 @@ DROP TYPE IF EXISTS user_role;
 DROP TYPE IF EXISTS payment_type;
 DROP TYPE IF EXISTS provider;
 
+---------------- INDEXES  ----------------------
+DROP INDEX IF EXISTS idx_address_country_id;
+DROP INDEX IF EXISTS idx_user_address_user_id;
+DROP INDEX IF EXISTS idx_user_address_address_id;
+DROP INDEX IF EXISTS idx_product_category_parent_category_id;
+DROP INDEX IF EXISTS idx_promotion_category_category_id;
+DROP INDEX IF EXISTS idx_promotion_category_promotion_id;
+DROP INDEX IF EXISTS idx_product_category_id;
+DROP INDEX IF EXISTS idx_product_shop_id;
+DROP INDEX IF EXISTS idx_product_item_product_id;
+DROP INDEX IF EXISTS idx_variation_product_id;
+DROP INDEX IF EXISTS idx_variation_option_variation_id;
+DROP INDEX IF EXISTS idx_product_configuration_product_item_id;
+DROP INDEX IF EXISTS idx_product_configuration_variation_option_id;
+DROP INDEX IF EXISTS idx_user_payment_method_user_id;
+DROP INDEX IF EXISTS idx_shopping_cart_user_id;
+DROP INDEX IF EXISTS idx_shopping_cart_item_shopping_cart_id;
+DROP INDEX IF EXISTS idx_shopping_cart_item_product_item_id;
+DROP INDEX IF EXISTS idx_shop_order_user_id;
+DROP INDEX IF EXISTS idx_shop_order_payment_method;
+DROP INDEX IF EXISTS idx_shop_order_shipping_address;
+DROP INDEX IF EXISTS idx_shop_order_shipping_method_id;
+DROP INDEX IF EXISTS idx_shop_order_order_status_id;
+DROP INDEX IF EXISTS idx_order_item_order_id;
+DROP INDEX IF EXISTS idx_order_item_product_item_id;
+DROP INDEX IF EXISTS idx_user_review_user_id;
+DROP INDEX IF EXISTS idx_user_review_ordered_product_id;
+
+---------------- FTS INDEXES  ------------------
+DROP INDEX IF EXISTS idx_product_fts;
+DROP INDEX IF EXISTS idx_shop_fts;
+
+---------------- TRIGGERS  ---------------------
+DROP TRIGGER IF EXISTS user_audit_update ON app_user;
+DROP TRIGGER IF EXISTS user_audit_delete ON app_user;
+DROP TRIGGER IF EXISTS user_audit_insert ON app_user;
+
+
 ------------------------------------------------
 ----------------  TYPES  -----------------------
 ------------------------------------------------
@@ -327,6 +365,54 @@ CREATE INDEX idx_shop_fts ON shop USING GIN (tsvector_column);
 ------------------------------------------------
 ----------------  TRIGGERS  --------------------
 ------------------------------------------------
+
+-- Function to insert into user_audit table everytime a user is updated
+CREATE OR REPLACE FUNCTION user_audit_update_trigger() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'UPDATE' THEN
+        INSERT INTO user_audit (user_id, action, action_timestamp)
+        VALUES (NEW.id, 'update', NOW());
+    END IF;
+    RETURN NEW;
+END $$ LANGUAGE plpgsql;
+
+-- Create the user_audit_update trigger
+CREATE TRIGGER user_audit_update
+AFTER UPDATE ON app_user
+FOR EACH ROW
+EXECUTE FUNCTION user_audit_update_trigger();
+
+-- Function to insert into user_audit table everytime a user is deleted
+CREATE OR REPLACE FUNCTION user_audit_delete_trigger() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        INSERT INTO user_audit (user_id, action, action_timestamp)
+        VALUES (OLD.id, 'delete', NOW());
+    END IF;
+    RETURN OLD;
+END $$ LANGUAGE plpgsql;
+
+-- Create the user_audit_delete trigger
+CREATE TRIGGER user_audit_delete
+AFTER DELETE ON app_user
+FOR EACH ROW
+EXECUTE FUNCTION user_audit_delete_trigger();
+
+-- Function to insert into user_audit table everytime a user is inserted
+CREATE OR REPLACE FUNCTION user_audit_insert_trigger() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO user_audit (user_id, action, action_timestamp)
+        VALUES (NEW.id, 'insert', NOW());
+    END IF;
+    RETURN NEW;
+END $$ LANGUAGE plpgsql;
+
+-- Create the user_audit_insert trigger
+CREATE TRIGGER user_audit_insert
+AFTER INSERT ON app_user
+FOR EACH ROW
+EXECUTE FUNCTION user_audit_insert_trigger();
 
 
 

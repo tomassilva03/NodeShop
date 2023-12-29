@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -8,10 +9,9 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 app.use(cors());
 
-app.post('/adduser', (req, res) => {
-  console.log(req.body);
-  res.send('Response from the server!');
-});
+// Routes
+app.use('/auth', authRoutes);
+// Use other route files as needed
 
 // Start the server
 app.listen(port, () => {

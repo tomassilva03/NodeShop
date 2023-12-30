@@ -8,6 +8,8 @@ CREATE SCHEMA IF NOT EXISTS nodeshop;
 
 SET search_path TO nodeshop;
 
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 ------------------------------------------------
 ----------------  DROPS  -----------------------
 ------------------------------------------------
@@ -128,7 +130,7 @@ CREATE TABLE address (
 );
 
 CREATE TABLE app_user (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     first_name VARCHAR(255) NOT NULL,
@@ -140,7 +142,7 @@ CREATE TABLE app_user (
 );
 
 CREATE TABLE user_address (
-    user_id INTEGER NOT NULL REFERENCES app_user(id),
+    user_id UUID NOT NULL REFERENCES app_user(id),
     address_id INTEGER NOT NULL REFERENCES address(id),
     PRIMARY KEY (user_id, address_id)
 );
@@ -171,7 +173,7 @@ CREATE TABLE shop (
     shop_name VARCHAR(255) NOT NULL,
     shop_description TEXT NOT NULL,
     shop_image VARCHAR(255) NOT NULL,
-    shop_owner_id INTEGER NOT NULL REFERENCES app_user(id)
+    shop_owner_id UUID NOT NULL REFERENCES app_user(id)
 );
 
 CREATE TABLE product (
@@ -212,7 +214,7 @@ CREATE TABLE product_configuration (
 
 CREATE TABLE user_payment_method (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES app_user(id),
+    user_id UUID NOT NULL REFERENCES app_user(id),
     payment_type payment_type NOT NULL,
     provider provider NOT NULL,
     last_four_digits VARCHAR(255) NOT NULL,
@@ -224,7 +226,7 @@ CREATE TABLE user_payment_method (
 
 CREATE TABLE shopping_cart (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES app_user(id)
+    user_id UUID NOT NULL REFERENCES app_user(id)
 );
 
 CREATE TABLE shopping_cart_item (
@@ -248,7 +250,7 @@ CREATE TABLE order_status (
 
 CREATE TABLE shop_order (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES app_user(id),
+    user_id UUID NOT NULL REFERENCES app_user(id),
     order_date DATE NOT NULL,
     payment_method INTEGER NOT NULL REFERENCES user_payment_method(id),
     shipping_address INTEGER NOT NULL REFERENCES address(id),
@@ -267,7 +269,7 @@ CREATE TABLE order_item (
 
 CREATE TABLE user_review (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES app_user(id),
+    user_id UUID NOT NULL REFERENCES app_user(id),
     ordered_product_id INTEGER NOT NULL REFERENCES order_item(id),
     rating_value INTEGER NOT NULL,
     comment TEXT NOT NULL
@@ -275,7 +277,7 @@ CREATE TABLE user_review (
 
 CREATE TABLE user_audit (
     id SERIAL PRIMARY KEY,
-    user_id INTEGER NOT NULL REFERENCES app_user(id),
+    user_id UUID NOT NULL REFERENCES app_user(id),
     action VARCHAR(10) NOT NULL,
     action_timestamp TIMESTAMP NOT NULL
 );
@@ -370,7 +372,7 @@ CREATE INDEX idx_shop_fts ON shop USING GIN (tsvector_column);
 CREATE OR REPLACE FUNCTION user_audit_update_trigger() RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'UPDATE' THEN
-        INSERT INTO user_audit (user_id, action, action_timestamp)
+        INSERT INTO nodeshop.user_audit (user_id, action, action_timestamp)
         VALUES (NEW.id, 'update', NOW());
     END IF;
     RETURN NEW;
@@ -386,7 +388,7 @@ EXECUTE FUNCTION user_audit_update_trigger();
 CREATE OR REPLACE FUNCTION user_audit_delete_trigger() RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'DELETE' THEN
-        INSERT INTO user_audit (user_id, action, action_timestamp)
+        INSERT INTO nodeshop.user_audit (user_id, action, action_timestamp)
         VALUES (OLD.id, 'delete', NOW());
     END IF;
     RETURN OLD;
@@ -402,7 +404,7 @@ EXECUTE FUNCTION user_audit_delete_trigger();
 CREATE OR REPLACE FUNCTION user_audit_insert_trigger() RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
-        INSERT INTO user_audit (user_id, action, action_timestamp)
+        INSERT INTO nodeshop.user_audit (user_id, action, action_timestamp)
         VALUES (NEW.id, 'insert', NOW());
     END IF;
     RETURN NEW;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 
 
@@ -14,6 +14,9 @@ const RegisterPage = () => {
     countryCode: '',
   });
 
+  const [passwordsMatch, setPasswordsMatch] = useState(true);
+  const [userExists, setUserExistsState] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -21,10 +24,41 @@ const RegisterPage = () => {
     });
   };
 
+  const checkUserExists = async (email) => {
+    try {
+      // Implement logic to check user existence (e.g., make an API request)
+      const response = await axios.get(`/auth/api/check-user?email=${email}`);
+      return response.data.exists;
+    } catch (error) {
+      console.error('Error checking user existence:', error.message);
+      return false;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
     try {
+      // Check if the passwords match
+      if (formData.password !== formData.confirmPassword) {
+        // Display an error message or prevent form submission
+        setPasswordsMatch(false);
+        return;
+      }
+
+      setPasswordsMatch(true);
+      
+      const userAlreadyExists = await checkUserExists(formData.email);
+
+      if (userAlreadyExists) {
+        // Display an error message or prevent form submission
+        console.error('User with this email already exists');
+        setUserExistsState(true);
+        return;
+      }
+
+      setUserExistsState(false);
+
       // Make an API request to your backend for user registration
       const response = await axios.post('/auth/api/register', formData);
   
@@ -42,6 +76,16 @@ const RegisterPage = () => {
   return (
     <div className="container mt-5">
       <h2>Register</h2>
+      {!passwordsMatch && (
+        <Alert variant="danger">
+          Passwords do not match. Please check your input.
+        </Alert>
+      )}
+      {userExists && (
+        <Alert variant="danger">
+          User with this email already exists. Please use a different email.
+        </Alert>
+      )}
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="formFirstName">
           <Form.Label>First Name</Form.Label>

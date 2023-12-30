@@ -12,7 +12,7 @@ router.post('/api/register', async (req, res) => {
         // Generate a random UUID for the user
         const userId = uuidv4();
 
-        const { email, password, first_name, last_name, phone_number } = req.body;
+        const { email, password, confirmPassword, first_name, last_name, phone_number } = req.body;
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -20,6 +20,17 @@ router.post('/api/register', async (req, res) => {
         // Validate input (Add more validation as needed)
         if (!email || !password || !first_name || !last_name) {
             return res.status(400).json({ message: 'Please provide all required fields' });
+        }
+
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: 'Passwords do not match' });
+        }
+
+        const userExists = await checkUserExistsByEmail(email);
+
+        if (userExists) {
+            return res.status(400).json({ message: 'User with this email already exists' });
         }
 
         // Insert user into the database
@@ -33,6 +44,31 @@ router.post('/api/register', async (req, res) => {
         res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
         console.error('Error during registration:', error.message);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+const checkUserExistsByEmail = async (email) => {
+    // Implement logic to check user existence in the database
+    const result = await pool.query('SELECT COUNT(*) FROM nodeshop.app_user WHERE email = $1', [email]);
+    return result.rows[0].count > 0;
+};
+
+router.get('/api/check-user', async (req, res) => {
+    try {
+        const { email } = req.query;
+
+        if (!email) {
+            return res.status(400).json({ message: 'Email parameter is required' });
+        }
+
+        // Query the database to check if the user with the specified email exists
+        const result = await pool.query('SELECT COUNT(*) FROM nodeshop.app_user WHERE email = $1', [email]);
+        const userExists = parseInt(result.rows[0].count) > 0;
+
+        res.json({ exists: userExists });
+    } catch (error) {
+        console.error('Error checking user existence:', error.message);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
@@ -74,5 +110,7 @@ router.post('/api/login', async (req, res) => {
 router.post('/api/logout', (req, res) => {
     // Implementation
 });
+
+
 
 module.exports = router;

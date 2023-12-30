@@ -10,12 +10,13 @@ const RegisterPage = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    phoneNumber: '',
+    phone_number: '',
     countryCode: '',
   });
 
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [userExists, setUserExistsState] = useState(false);
+  const [PasswordError, setPasswordError] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -35,30 +36,56 @@ const RegisterPage = () => {
     }
   };
 
+  const isPasswordValid = (password) => {
+    return password.length >= 8;
+  };
+
+  const handlePasswordsMatch = () => {
+    setPasswordsMatch(true);
+  };
+
+  const handleUserExists = () => {
+    setUserExistsState(false);
+  };
+
+  const handleClosePasswordError = () => {
+    setPasswordError(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    const userAlreadyExists = await checkUserExists(formData.email);
+
+    if (userAlreadyExists) {
+      // Display an error message or prevent form submission
+      console.error('User with this email already exists');
+      setUserExistsState(true);
+      return;
+    }
+
+    setUserExistsState(false);
+
+    if (!isPasswordValid(formData.password)) {
+      // Display an error message or prevent form submission
+      console.error('Password must have at least 8 characters');
+      setPasswordError(true);
+      return;
+    }
+
+    setPasswordError(false);
+
+    // Check if the passwords match
+    if (formData.password !== formData.confirmPassword) {
+      // Display an error message or prevent form submission
+      console.error('Passwords do not match');
+      setPasswordsMatch(false);
+      return;
+    }
+
+    setPasswordsMatch(true);
+
     try {
-      // Check if the passwords match
-      if (formData.password !== formData.confirmPassword) {
-        // Display an error message or prevent form submission
-        setPasswordsMatch(false);
-        return;
-      }
-
-      setPasswordsMatch(true);
-      
-      const userAlreadyExists = await checkUserExists(formData.email);
-
-      if (userAlreadyExists) {
-        // Display an error message or prevent form submission
-        console.error('User with this email already exists');
-        setUserExistsState(true);
-        return;
-      }
-
-      setUserExistsState(false);
-
       // Make an API request to your backend for user registration
       const response = await axios.post('/auth/api/register', formData);
   
@@ -77,13 +104,18 @@ const RegisterPage = () => {
     <div className="container mt-5">
       <h2>Register</h2>
       {!passwordsMatch && (
-        <Alert variant="danger">
+        <Alert variant="danger" dismissible onClose={handlePasswordsMatch}>
           Passwords do not match. Please check your input.
         </Alert>
       )}
       {userExists && (
-        <Alert variant="danger">
+        <Alert variant="danger" dismissible onClose={handleUserExists}>
           User with this email already exists. Please use a different email.
+        </Alert>
+      )}
+      {PasswordError && (
+        <Alert variant="danger" dismissible onClose={handleClosePasswordError}>
+          Password must have at least 8 characters
         </Alert>
       )}
       <Form onSubmit={handleSubmit}>
@@ -93,7 +125,7 @@ const RegisterPage = () => {
             type="text"
             placeholder="Enter your first name"
             name="first_name"
-            value={formData.firstName}
+            value={formData.first_name}
             onChange={handleChange}
             required
           />
@@ -105,7 +137,7 @@ const RegisterPage = () => {
             type="text"
             placeholder="Enter your last name"
             name="last_name"
-            value={formData.lastName}
+            value={formData.last_name}
             onChange={handleChange}
             required
           />
@@ -152,8 +184,8 @@ const RegisterPage = () => {
           <Form.Control
             type="text"
             placeholder="Enter your phone number"
-            name="phoneNumber"
-            value={formData.phoneNumber}
+            name="phone_number"
+            value={formData.phone_number}
             onChange={handleChange}
             required
           />

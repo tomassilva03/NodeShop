@@ -5,6 +5,11 @@ const bcrypt = require('bcrypt');
 const pool = require('../database');
 const { v4: uuidv4 } = require('uuid');
 
+const checkUserExistsByEmail = async (email) => {
+    // Implement logic to check user existence in the database
+    const result = await pool.query('SELECT COUNT(*) FROM nodeshop.app_user WHERE email = $1', [email]);
+    return result.rows[0].count > 0;
+};
 
 // Register user
 router.post('/api/register', async (req, res) => {
@@ -47,12 +52,6 @@ router.post('/api/register', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
-const checkUserExistsByEmail = async (email) => {
-    // Implement logic to check user existence in the database
-    const result = await pool.query('SELECT COUNT(*) FROM nodeshop.app_user WHERE email = $1', [email]);
-    return result.rows[0].count > 0;
-};
 
 router.get('/api/check-user', async (req, res) => {
     try {

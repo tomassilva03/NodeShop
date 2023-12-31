@@ -107,7 +107,7 @@ const LoginPage = () => {
 
           <div className="mt-3">
                 <p>
-                    Don't have an accountt? <Link to="/register">Register here</Link>.
+                    Don't have an account? <Link to="/register">Register here</Link>.
                 </p>
             </div>
         </div>

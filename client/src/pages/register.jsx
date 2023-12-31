@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
@@ -40,11 +41,11 @@ const RegisterPage = () => {
     return password.length >= 8;
   };
 
-  const handlePasswordsMatch = () => {
+  const handleClosePasswordsMatch = () => {
     setPasswordsMatch(true);
   };
 
-  const handleUserExists = () => {
+  const handleCloseUserExists = () => {
     setUserExistsState(false);
   };
 
@@ -104,12 +105,12 @@ const RegisterPage = () => {
     <div className="container mt-5">
       <h2>Register</h2>
       {!passwordsMatch && (
-        <Alert variant="danger" dismissible onClose={handlePasswordsMatch}>
+        <Alert variant="danger" dismissible onClose={handleClosePasswordsMatch}>
           Passwords do not match. Please check your input.
         </Alert>
       )}
       {userExists && (
-        <Alert variant="danger" dismissible onClose={handleUserExists}>
+        <Alert variant="danger" dismissible onClose={handleCloseUserExists}>
           User with this email already exists. Please use a different email.
         </Alert>
       )}
@@ -211,6 +212,12 @@ const RegisterPage = () => {
           Register
         </Button>
       </Form>
+
+      <div className="mt-3">
+          <p>
+              Already have an account? <Link to="/login">Login here</Link>.
+          </p>
+      </div>
     </div>
   );
 };

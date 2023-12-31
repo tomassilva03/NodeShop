@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const LoginPage = () => {
+
+    const history = useNavigate();
+
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -19,7 +23,6 @@ const LoginPage = () => {
     const handleClosePasswordError = () => {
         setPasswordError(false);
     }
-
 
     const handleChange = (e) => {
         setFormData({
@@ -56,9 +59,15 @@ const LoginPage = () => {
         try {
             const response = await axios.post('/auth/api/login', formData);
             console.log(response);
+            if (response.status === 200) {
+                console.log(response);
+                history('/');
+            } else {
+                console.error('Incorrect password. Please try again.');
+                setPasswordError(true);
+            }
         } catch (error) {
             console.error('Error logging in:', error);
-            setPasswordError(true);
         }
     }
 

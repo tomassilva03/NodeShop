@@ -10,9 +10,14 @@ const LoginPage = () => {
     });
 
     const [userExists, setUserExistsState] = useState(true);
+    const [passwordError, setPasswordError] = useState(false);
 
     const handleCloseUserExists = () => {
         setUserExistsState(true);
+    }
+
+    const handleClosePasswordError = () => {
+        setPasswordError(false);
     }
 
 
@@ -53,6 +58,7 @@ const LoginPage = () => {
             console.log(response);
         } catch (error) {
             console.error('Error logging in:', error);
+            setPasswordError(true);
         }
     }
 
@@ -62,6 +68,11 @@ const LoginPage = () => {
             {!userExists && (
             <Alert variant="danger" onClose={handleCloseUserExists} dismissible>
                 A user with that email does not exist. Please register first.
+            </Alert>
+            )}
+            {passwordError && (
+            <Alert variant="danger" onClose={handleClosePasswordError} dismissible>
+                Password is incorrect.
             </Alert>
             )}
           <Form onSubmit={handleSubmit}>

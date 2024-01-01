@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import MainLayout from '../components/MainLayout';
 
 
 const RegisterPage = () => {
@@ -102,123 +103,125 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="container mt-5">
-      <h2>Register</h2>
-      {!passwordsMatch && (
-        <Alert variant="danger" dismissible onClose={handleClosePasswordsMatch}>
-          Passwords do not match. Please check your input.
-        </Alert>
-      )}
-      {userExists && (
-        <Alert variant="danger" dismissible onClose={handleCloseUserExists}>
-          User with this email already exists. Please use a different email.
-        </Alert>
-      )}
-      {PasswordError && (
-        <Alert variant="danger" dismissible onClose={handleClosePasswordError}>
-          Password must have at least 8 characters
-        </Alert>
-      )}
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="formFirstName">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your first name"
-            name="first_name"
-            value={formData.first_name}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+    <MainLayout>
+      <div className="container mt-5">
+        <h2>Register</h2>
+        {!passwordsMatch && (
+          <Alert variant="danger" dismissible onClose={handleClosePasswordsMatch}>
+            Passwords do not match. Please check your input.
+          </Alert>
+        )}
+        {userExists && (
+          <Alert variant="danger" dismissible onClose={handleCloseUserExists}>
+            User with this email already exists. Please use a different email.
+          </Alert>
+        )}
+        {PasswordError && (
+          <Alert variant="danger" dismissible onClose={handleClosePasswordError}>
+            Password must have at least 8 characters
+          </Alert>
+        )}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formFirstName">
+            <Form.Label>First Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your first name"
+              name="first_name"
+              value={formData.first_name}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group controlId="formLastName">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your last name"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group controlId="formLastName">
+            <Form.Label>Last Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your last name"
+              name="last_name"
+              value={formData.last_name}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter your email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter your email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Enter your password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Enter your password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group controlId="formConfirmPassword">
-          <Form.Label>Confirm Password</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Confirm your password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group controlId="formConfirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Confirm your password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group controlId="formPhoneNumber">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter your phone number"
-            name="phone_number"
-            value={formData.phone_number}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group controlId="formPhoneNumber">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter your phone number"
+              name="phone_number"
+              value={formData.phone_number}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
 
-        <Form.Group controlId="formCountryCode">
-          <Form.Label>Country Code</Form.Label>
-          <Form.Control
-            as="select"
-            name="countryCode"
-            value={formData.countryCode}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Select Country Code</option>
-            <option value="+1">+1 (USA)</option>
-            <option value="+44">+44 (UK)</option>
-            {/* Add more options as needed */}
-          </Form.Control>
-        </Form.Group>
+          <Form.Group controlId="formCountryCode">
+            <Form.Label>Country Code</Form.Label>
+            <Form.Control
+              as="select"
+              name="countryCode"
+              value={formData.countryCode}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select Country Code</option>
+              <option value="+1">+1 (USA)</option>
+              <option value="+44">+44 (UK)</option>
+              {/* Add more options as needed */}
+            </Form.Control>
+          </Form.Group>
 
-        <Button variant="success" type="submit">
-          Register
-        </Button>
-      </Form>
+          <Button variant="success" type="submit">
+            Register
+          </Button>
+        </Form>
 
-      <div className="mt-3">
-          <p>
-              Already have an account? <Link to="/login">Login here</Link>.
-          </p>
+        <div className="mt-3">
+            <p>
+                Already have an account? <Link to="/login">Login here</Link>.
+            </p>
+        </div>
       </div>
-    </div>
+    </MainLayout>
   );
 };
 

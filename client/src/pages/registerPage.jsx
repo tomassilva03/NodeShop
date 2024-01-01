@@ -208,7 +208,7 @@ const RegisterPage = () => {
           </Form.Control>
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="success" type="submit">
           Register
         </Button>
       </Form>

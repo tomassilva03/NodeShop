@@ -3,6 +3,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import MainLayout from '../components/MainLayout';
 
 const LoginPage = () => {
 
@@ -72,6 +73,7 @@ const LoginPage = () => {
     }
 
     return (
+      <MainLayout>
         <div className="container mt-5">
           <h2>Login</h2>
             {!userExists && (
@@ -109,7 +111,7 @@ const LoginPage = () => {
               />
             </Form.Group>
     
-            <Button variant="primary" type="submit">
+            <Button variant="success" type="submit">
               Login
             </Button>
           </Form>
@@ -120,6 +122,7 @@ const LoginPage = () => {
                 </p>
             </div>
         </div>
+      </MainLayout>
     );
 };
 

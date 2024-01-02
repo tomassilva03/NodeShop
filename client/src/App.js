@@ -6,7 +6,7 @@ import HomePage from './pages/homePage';
 
 const App = () => {
   return (
-    <Router>
+    <Router basename={process.env.PUBLIC_URL}>
       <Routes>
         <Route exact path="/register" element={<RegisterPage/>} />
         <Route exact path="/login" element={<LoginPage/>} />

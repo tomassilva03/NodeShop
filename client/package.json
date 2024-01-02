@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.3",
     "bootstrap": "^5.3.2",
+    "gh-pages": "^6.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.2",
     "react-bootstrap-icons": "^1.10.3",
@@ -22,7 +23,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build ../docs/",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

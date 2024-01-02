@@ -64,7 +64,7 @@ const LoginPage = () => {
             console.log(response);
             if (response.status === 200) {
                 console.log(response);
-                history('/');
+                history('/NodeShop/');
             } else {
                 console.error('Incorrect password. Please try again.');
                 setPasswordError(true);
@@ -128,7 +128,7 @@ const LoginPage = () => {
 
           <div className="mt-2">
                 <p>
-                    Don't have an account? <Link to="/register">Register here</Link>.
+                    Don't have an account? <Link to="/NodeShop/register">Register here</Link>.
                 </p>
             </div>
         </div>

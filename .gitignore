@@ -5,7 +5,7 @@ node_modules/
 .env
 
 # Build and compiled files
-/build
+/client/build
 /dist
 
 # Log files

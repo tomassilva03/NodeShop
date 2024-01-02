@@ -95,7 +95,8 @@ const RegisterPage = () => {
   
       // Handle the response
       console.log('Registration successful:', response.data);
-      // Redirect the user to a success page or perform other actions
+      // Redirect the user to home
+
   
     } catch (error) {
       // Handle registration error
@@ -232,7 +233,7 @@ const RegisterPage = () => {
 
         <div className="mt-3">
             <p>
-                Already have an account? <Link to="/login">Login here</Link>.
+                Already have an account? <Link to="/NodeShop/login">Login here</Link>.
             </p>
         </div>
       </div>

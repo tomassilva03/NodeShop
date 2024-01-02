@@ -19,6 +19,7 @@ const RegisterPage = () => {
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [userExists, setUserExistsState] = useState(false);
   const [PasswordError, setPasswordError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -161,7 +162,7 @@ const RegisterPage = () => {
           <Form.Group controlId="formPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Enter your password"
               name="password"
               value={formData.password}
@@ -173,13 +174,16 @@ const RegisterPage = () => {
           <Form.Group controlId="formConfirmPassword">
             <Form.Label>Confirm Password</Form.Label>
             <Form.Control
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               placeholder="Confirm your password"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               required
             />
+            <Button onClick={() => setShowPassword(!showPassword)} className="mt-2 mb-2" variant="secondary">
+                {showPassword ? 'Hide password' : 'Show password'}
+              </Button>
           </Form.Group>
 
           <Form.Group controlId="formPhoneNumber">

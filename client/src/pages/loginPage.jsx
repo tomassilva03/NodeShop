@@ -16,6 +16,7 @@ const LoginPage = () => {
 
     const [userExists, setUserExistsState] = useState(true);
     const [passwordError, setPasswordError] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleCloseUserExists = () => {
         setUserExistsState(true);
@@ -102,13 +103,16 @@ const LoginPage = () => {
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
                 required
               />
+              <Button onClick={() => setShowPassword(!showPassword)} className="mt-2 mb-2" variant="secondary">
+                {showPassword ? 'Hide password' : 'Show password'}
+              </Button>
             </Form.Group>
     
             <Button variant="success" type="submit">
@@ -116,7 +120,7 @@ const LoginPage = () => {
             </Button>
           </Form>
 
-          <div className="mt-3">
+          <div className="mt-2">
                 <p>
                     Don't have an account? <Link to="/register">Register here</Link>.
                 </p>

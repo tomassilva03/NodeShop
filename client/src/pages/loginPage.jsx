@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
 
@@ -75,6 +76,9 @@ const LoginPage = () => {
 
     return (
       <MainLayout>
+        <Helmet>
+          <title>NodeShop | Login</title>
+        </Helmet>
         <div className="container mt-5">
           <h2>Login</h2>
             {!userExists && (

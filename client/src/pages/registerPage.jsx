@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
 
@@ -105,6 +106,9 @@ const RegisterPage = () => {
 
   return (
     <MainLayout>
+      <Helmet>
+        <title>NodeShop | Register</title>
+      </Helmet>
       <div className="container mt-5">
         <h2>Register</h2>
         {!passwordsMatch && (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
@@ -161,6 +161,7 @@ const RegisterPage = () => {
 
           <Form.Group controlId="formPassword">
             <Form.Label>Password</Form.Label>
+            <InputGroup>
             <Form.Control
               type={showPassword ? 'text' : 'password'}
               placeholder="Enter your password"
@@ -169,10 +170,15 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
             />
+            <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
+                {showPassword ? 'Hide password' : 'Show password'}
+              </Button>
+            </InputGroup>
           </Form.Group>
 
           <Form.Group controlId="formConfirmPassword">
             <Form.Label>Confirm Password</Form.Label>
+            <InputGroup>
             <Form.Control
               type={showPassword ? 'text' : 'password'}
               placeholder="Confirm your password"
@@ -181,9 +187,10 @@ const RegisterPage = () => {
               onChange={handleChange}
               required
             />
-            <Button onClick={() => setShowPassword(!showPassword)} className="mt-2 mb-2" variant="secondary">
+            <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
                 {showPassword ? 'Hide password' : 'Show password'}
               </Button>
+            </InputGroup>
           </Form.Group>
 
           <Form.Group controlId="formPhoneNumber">

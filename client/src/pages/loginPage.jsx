@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert } from 'react-bootstrap';
+import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -102,6 +102,7 @@ const LoginPage = () => {
     
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
+              <InputGroup>
               <Form.Control
                 type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
@@ -110,10 +111,11 @@ const LoginPage = () => {
                 onChange={handleChange}
                 required
               />
-              <Button onClick={() => setShowPassword(!showPassword)} className="mt-2 mb-2" variant="secondary">
-                {showPassword ? 'Hide password' : 'Show password'}
-              </Button>
-            </Form.Group>
+              <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
+                  {showPassword ? 'Hide password' : 'Show password'}
+                </Button>
+              </InputGroup>
+          </Form.Group>
     
             <Button variant="success" type="submit">
               Login

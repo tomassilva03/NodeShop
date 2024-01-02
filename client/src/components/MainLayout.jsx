@@ -7,7 +7,7 @@ const MainLayout = ({ children }) => {
             {/* Navbar */}
             <Navbar bg="success" variant="dark" expand="lg">
                 <Container>
-                    <Navbar.Brand href="/">Your App Name</Navbar.Brand>
+                    <Navbar.Brand href="/">NodeShop</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">

@@ -227,21 +227,22 @@ const RegisterPage = () => {
           <Form.Group controlId="formPhoneNumber">
             <Form.Label>Phone Number</Form.Label>
             <InputGroup>
-              <DropdownButton
+            <DropdownButton
                 variant="outline-secondary"
                 title={selectedCountry ? `${selectedCountry.country} (${selectedCountry.code})` : 'Select Country'}
                 id="input-group-dropdown-1"
+                drop= "up"
               >
-                <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                <Dropdown.Menu style={{ maxHeight: '200px', overflowY: 'auto' }}>
                   {country_phone_code.map((country) => (
                     <Dropdown.Item
                       key={country.code}
-                      onSelect={() => handleCountrySelect(country)}
+                      onClick={() => handleCountrySelect(country)}
                     >
                       {country.country} ({country.code})
                     </Dropdown.Item>
                   ))}
-                </div>
+                </Dropdown.Menu>
               </DropdownButton>
               <Form.Control
                 type="text"

@@ -22,27 +22,25 @@ const RegisterPage = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const country_phone_code = [
-    { code: '+1', country: 'USA' },
-    { code: '+44', country: 'UK' },
-    { code: '+91', country: 'India' },
-    { code: '+49', country: 'Germany' },
-    { code: '+33', country: 'France' },
-    { code: '+81', country: 'Japan' },
-    { code: '+86', country: 'China' },
-    { code: '+7', country: 'Russia' },
-    { code: '+55', country: 'Brazil' },
     { code: '+54', country: 'Argentina' },
     { code: '+61', country: 'Australia' },
+    { code: '+55', country: 'Brazil' },
     { code: '+1', country: 'Canada' },
-    { code: '+52', country: 'Mexico' },
-    { code: '+34', country: 'Spain' },
+    { code: '+86', country: 'China' },
+    { code: '+33', country: 'France' },
+    { code: '+49', country: 'Germany' },
+    { code: '+91', country: 'India' },
     { code: '+39', country: 'Italy' },
-    { code: '+82', country: 'South Korea' },
-    { code: '+351', country: 'Portugal' },
-    { code: '+46', country: 'Sweden' },
+    { code: '+81', country: 'Japan' },
+    { code: '+52', country: 'Mexico' },
     { code: '+31', country: 'Netherlands' },
     { code: '+64', country: 'New Zealand' },
-    // Add more countries as needed
+    { code: '+351', country: 'Portugal' },
+    { code: '+7', country: 'Russia' },
+    { code: '+34', country: 'Spain' },
+    { code: '+82', country: 'South Korea' },
+    { code: '+46', country: 'Sweden' },
+    { code: '+1', country: 'USA' },
   ];
 
   const handleChange = (e) => {
@@ -234,14 +232,16 @@ const RegisterPage = () => {
                 title={selectedCountry ? `${selectedCountry.country} (${selectedCountry.code})` : 'Select Country'}
                 id="input-group-dropdown-1"
               >
-                {country_phone_code.map((country) => (
-                  <Dropdown.Item
-                    key={country.code}
-                    onClick={() => handleCountrySelect(country)}
-                  >
-                    {country.country} ({country.code})
-                  </Dropdown.Item>
-                ))}
+                <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                  {country_phone_code.map((country) => (
+                    <Dropdown.Item
+                      key={country.code}
+                      onSelect={() => handleCountrySelect(country)}
+                    >
+                      {country.country} ({country.code})
+                    </Dropdown.Item>
+                  ))}
+                </div>
               </DropdownButton>
               <Form.Control
                 type="text"

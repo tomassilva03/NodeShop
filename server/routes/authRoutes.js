@@ -17,7 +17,7 @@ router.post('/api/register', async (req, res) => {
         // Generate a random UUID for the user
         const userId = uuidv4();
 
-        const { email, password, confirmPassword, first_name, last_name, phone_number } = req.body;
+        const { email, password, confirmPassword, first_name, last_name, phone_number} = req.body;
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);

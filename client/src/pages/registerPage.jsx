@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
+import { Form, Button, Alert, InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
-
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -14,13 +13,18 @@ const RegisterPage = () => {
     password: '',
     confirmPassword: '',
     phone_number: '',
-    countryCode: '',
   });
 
   const [passwordsMatch, setPasswordsMatch] = useState(true);
   const [userExists, setUserExistsState] = useState(false);
   const [PasswordError, setPasswordError] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
+  const country_phone_code = [
+    { code: '+1', country: 'USA' },
+    { code: '+44', country: 'UK' },
+  ];
 
   const handleChange = (e) => {
     setFormData({
@@ -31,7 +35,6 @@ const RegisterPage = () => {
 
   const checkUserExists = async (email) => {
     try {
-      // Implement logic to check user existence (e.g., make an API request)
       const response = await axios.get(`/auth/api/check-user?email=${email}`);
       return response.data.exists;
     } catch (error) {
@@ -56,13 +59,20 @@ const RegisterPage = () => {
     setPasswordError(false);
   };
 
+  const handleCountrySelect = (country) => {
+    setSelectedCountry(country);
+    setFormData({
+      ...formData,
+      country_phone_code: country.code,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userAlreadyExists = await checkUserExists(formData.email);
 
     if (userAlreadyExists) {
-      // Display an error message or prevent form submission
       console.error('User with this email already exists');
       setUserExistsState(true);
       return;
@@ -71,7 +81,6 @@ const RegisterPage = () => {
     setUserExistsState(false);
 
     if (!isPasswordValid(formData.password)) {
-      // Display an error message or prevent form submission
       console.error('Password must have at least 8 characters');
       setPasswordError(true);
       return;
@@ -79,9 +88,7 @@ const RegisterPage = () => {
 
     setPasswordError(false);
 
-    // Check if the passwords match
     if (formData.password !== formData.confirmPassword) {
-      // Display an error message or prevent form submission
       console.error('Passwords do not match');
       setPasswordsMatch(false);
       return;
@@ -89,19 +96,21 @@ const RegisterPage = () => {
 
     setPasswordsMatch(true);
 
+    const fullPhoneNumber = `${formData.country_phone_code}${formData.phone_number}`;
+
     try {
-      // Make an API request to your backend for user registration
-      const response = await axios.post('/auth/api/register', formData);
-  
-      // Handle the response
+
+      const updatedFormData = {
+        ...formData,
+        phone_number: fullPhoneNumber,
+      };
+
+      const response = await axios.post('/auth/api/register', updatedFormData);
+
       console.log('Registration successful:', response.data);
       // Redirect the user to home
-
-  
     } catch (error) {
-      // Handle registration error
       console.error('Registration error:', error.response.data);
-      // Display an error message to the user or perform other error handling
     }
   };
 
@@ -167,15 +176,15 @@ const RegisterPage = () => {
           <Form.Group controlId="formPassword">
             <Form.Label>Password</Form.Label>
             <InputGroup>
-            <Form.Control
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Enter your password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-            <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
+              <Form.Control
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Enter your password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
                 {showPassword ? 'Hide password' : 'Show password'}
               </Button>
             </InputGroup>
@@ -184,15 +193,15 @@ const RegisterPage = () => {
           <Form.Group controlId="formConfirmPassword">
             <Form.Label>Confirm Password</Form.Label>
             <InputGroup>
-            <Form.Control
-              type={showPassword ? 'text' : 'password'}
-              placeholder="Confirm your password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-            <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
+              <Form.Control
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Confirm your password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
+              <Button onClick={() => setShowPassword(!showPassword)} variant="outline-secondary" id="button-addon2">
                 {showPassword ? 'Hide password' : 'Show password'}
               </Button>
             </InputGroup>
@@ -200,30 +209,30 @@ const RegisterPage = () => {
 
           <Form.Group controlId="formPhoneNumber">
             <Form.Label>Phone Number</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your phone number"
-              name="phone_number"
-              value={formData.phone_number}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group controlId="formCountryCode">
-            <Form.Label>Country Code</Form.Label>
-            <Form.Control
-              as="select"
-              name="countryCode"
-              value={formData.countryCode}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Country Code</option>
-              <option value="+1">+1 (USA)</option>
-              <option value="+44">+44 (UK)</option>
-              {/* Add more options as needed */}
-            </Form.Control>
+            <InputGroup>
+              <DropdownButton
+                variant="outline-secondary"
+                title={selectedCountry ? `${selectedCountry.country} (${selectedCountry.code})` : 'Select Country'}
+                id="input-group-dropdown-1"
+              >
+                {country_phone_code.map((country) => (
+                  <Dropdown.Item
+                    key={country.code}
+                    onClick={() => handleCountrySelect(country)}
+                  >
+                    {country.country} ({country.code})
+                  </Dropdown.Item>
+                ))}
+              </DropdownButton>
+              <Form.Control
+                type="text"
+                placeholder="Enter your phone number"
+                name="phone_number"
+                value={formData.phone_number}
+                onChange={handleChange}
+                required
+              />
+            </InputGroup>
           </Form.Group>
 
           <Button className="mt-2" variant="success" type="submit">
@@ -232,9 +241,9 @@ const RegisterPage = () => {
         </Form>
 
         <div className="mt-3">
-            <p>
-                Already have an account? <Link to="/NodeShop/login">Login here</Link>.
-            </p>
+          <p>
+            Already have an account? <Link to="/NodeShop/login">Login here</Link>.
+          </p>
         </div>
       </div>
     </MainLayout>

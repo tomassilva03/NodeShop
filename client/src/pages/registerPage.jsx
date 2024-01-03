@@ -226,7 +226,7 @@ const RegisterPage = () => {
             </Form.Control>
           </Form.Group>
 
-          <Button variant="success" type="submit">
+          <Button className="mt-2" variant="success" type="submit">
             Register
           </Button>
         </Form>

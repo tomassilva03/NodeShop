@@ -1,31 +1,62 @@
 import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import logo from '../img/Node.png';
+import { Navbar, Nav, Container, Button, Form, Offcanvas } from 'react-bootstrap';
 
 const MainLayout = ({ children }) => {
     return (
-        <div>
-            {/* Navbar */}
-            <Navbar bg="success" variant="dark" expand="lg">
-                <Container>
-                    <Navbar.Brand href="/NodeShop/">NodeShop</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link href="/NodeShop/">Home</Nav.Link>
-                            {/* Add other navbar links as needed */}
-                        </Nav>
-                        <Nav>
-                            <Nav.Link href="/NodeShop/login">Login</Nav.Link>
-                            <Nav.Link href="/NodeShop/register">Register</Nav.Link>
-                            {/* Add user-related actions like logout */}
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-
-            {/* Content */}
-            <Container className="mt-3">{children}</Container>
-        </div>
+        <>
+        <Navbar key="lg" expand="lg" className="bg-body-tertiary mb-3">
+          <Container fluid>
+          <Navbar.Brand href="/NodeShop/">
+          <img 
+            src={logo}
+            alt="NodeShop Logo"
+            width="30"
+            height="30"
+            className="d-inline-block align-top"
+            />{' '}
+            NodeShop</Navbar.Brand>
+            <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-lg`} />
+            <Navbar.Offcanvas
+              id={`offcanvasNavbar-expand-lg`}
+              aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
+              placement="end"
+            >
+              <Offcanvas.Header closeButton>
+              <img 
+                src={logo}
+                alt="NodeShop Logo"
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+                />{' '}
+                <Offcanvas.Title id={`offcanvasNavbarLabel-expand-lg`}>
+                  NodeShop
+                </Offcanvas.Title>
+              </Offcanvas.Header>
+              <Offcanvas.Body>
+                <Nav className="justify-content-end flex-grow-1 pe-3">
+                  <Nav.Link href="/NodeShop/">Home</Nav.Link>
+                  <Nav.Link href="/NodeShop/login">Login</Nav.Link>
+                  <Nav.Link href="/NodeShop/register">Register</Nav.Link>
+                </Nav>
+                <Form className="d-flex">
+                  <Form.Control
+                    type="search"
+                    placeholder="Search"
+                    className="me-2"
+                    aria-label="Search"
+                  />
+                  <Button variant="outline-success">Search</Button>
+                </Form>
+              </Offcanvas.Body>
+            </Navbar.Offcanvas>
+          </Container>
+        </Navbar>
+        <Container className="mt-3" fluid>
+          {children}
+        </Container>
+    </>
     );
 };
 

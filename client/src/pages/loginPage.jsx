@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, InputGroup } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import MainLayout from '../components/MainLayout';
@@ -121,7 +120,7 @@ const LoginPage = () => {
               </InputGroup>
           </Form.Group>
     
-            <Button variant="success" type="submit">
+            <Button className="mt-2" variant="success" type="submit">
               Login
             </Button>
           </Form>

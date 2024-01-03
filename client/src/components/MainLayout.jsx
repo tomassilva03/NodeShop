@@ -5,7 +5,7 @@ import { Navbar, Nav, Container, Button, Form, Offcanvas } from 'react-bootstrap
 const MainLayout = ({ children }) => {
     return (
         <>
-        <Navbar key="lg" expand="lg" className="bg-body-tertiary mb-3">
+        <Navbar key="lg" expand="lg" className="bg-secondary-subtle mb-3">
           <Container fluid>
           <Navbar.Brand href="/NodeShop/">
           <img 
@@ -21,6 +21,7 @@ const MainLayout = ({ children }) => {
               id={`offcanvasNavbar-expand-lg`}
               aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
               placement="end"
+              className="bg-secondary-subtle"
             >
               <Offcanvas.Header closeButton>
               <img 

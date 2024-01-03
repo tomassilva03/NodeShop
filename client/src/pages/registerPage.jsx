@@ -24,6 +24,25 @@ const RegisterPage = () => {
   const country_phone_code = [
     { code: '+1', country: 'USA' },
     { code: '+44', country: 'UK' },
+    { code: '+91', country: 'India' },
+    { code: '+49', country: 'Germany' },
+    { code: '+33', country: 'France' },
+    { code: '+81', country: 'Japan' },
+    { code: '+86', country: 'China' },
+    { code: '+7', country: 'Russia' },
+    { code: '+55', country: 'Brazil' },
+    { code: '+54', country: 'Argentina' },
+    { code: '+61', country: 'Australia' },
+    { code: '+1', country: 'Canada' },
+    { code: '+52', country: 'Mexico' },
+    { code: '+34', country: 'Spain' },
+    { code: '+39', country: 'Italy' },
+    { code: '+82', country: 'South Korea' },
+    { code: '+351', country: 'Portugal' },
+    { code: '+46', country: 'Sweden' },
+    { code: '+31', country: 'Netherlands' },
+    { code: '+64', country: 'New Zealand' },
+    // Add more countries as needed
   ];
 
   const handleChange = (e) => {
